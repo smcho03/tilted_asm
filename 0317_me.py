@@ -1,5 +1,7 @@
 import numpy as np
-
+import matplotlib.pyplot as plt
+from matplotlib.gridspec import GridSpec
+import matplotlib.patches as mpatches
 
 #h를 통한 반사면 gradient 계산
 def compute_surface_gradients(
@@ -19,7 +21,7 @@ def compute_surface_gradients(
 def compute_U_in(
     X: np.ndarray,
     Y: np.ndarray,
-    h: np.darray,
+    h: np.ndarray,
     A0: float,
     wavelength: float
 ) -> np.ndarray:
@@ -78,8 +80,8 @@ def compute_U_CMOS_loop(
     dh_dy_ref: np.ndarray,  #반사면 편미분
     Y_prime: np.ndarray, #cmos y좌표
     Z_prime: np.ndarray, #cmos z좌표
-    x_cmos_location: float, #cmos 평면 x좌표
     wavelength: float,  #레이저 파장
+    x_cmos_location: float, #cmos 평면 x좌표
     dx_ref_grid: float, #반사면 x그리드 간격
     dy_ref_grid: float  #반사면 y그리드 간격
     
@@ -167,6 +169,7 @@ def forward_propagate(
         'dh_dy':dh_dy
     }
     
+
 if __name__=="__main__":
     import time
     
@@ -180,7 +183,7 @@ if __name__=="__main__":
     pixel_size=4e-6
     N=16    #해상도 이후 수정
     
-    x_coords=np.linespace(1,N,N)*pixel_size #x>0
+    x_coords=np.linspace(1,N,N)*pixel_size #x>0
     y_coords=np.linspace(-N//2, N//2-1,N)*pixel_size
     
     #표면 높이맵
@@ -188,7 +191,7 @@ if __name__=="__main__":
     sigma=3*pixel_size
     h_max=500e-6
     h=h_max*np.exp(
-        -((X_tmp-x_coords[n//2])**2+Y_tmp**2)/(2*sigma*2)
+        -((X_tmp-x_coords[n//2])**2+Y_tmp**2)/(2*sigma**2)
     )
     
     x_cmos_location=x_coords[-1]+5e-3   #반사면 오른쪽 5mm에 cmos배치
@@ -196,4 +199,7 @@ if __name__=="__main__":
     y_prime_coords=y_coords.copy()  #cmos넓이가 반사면 넓이랑 같게 설정했는데 이후 수정 가능
     z_prime_coords=x_coords.copy()
     
-    
+    result_loop=forward_propagate(
+        h, x_coords, y_coords, y_prime_coords, z_prime_coords, wavelength,
+        A0, n1, n2_complex, x_cmos_location
+    )
