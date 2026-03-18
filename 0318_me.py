@@ -216,8 +216,8 @@ if __name__=="__main__":
     x_cmos_location=x_coords[-1]+10e-3   #반사면 오른쪽 10mm에 cmos배치
     N_cmos = 1000   #cmos 픽셀 개수
     pixel_size_cmos=3e-6    #cmos 픽셀 사이즈
-    y_prime_coords=np.linspace(y_coords_center-N_cmos//2,y_coords_center+N_cmos//2,N_cmos)
-    z_prime_coords=np.linspace(x_coords_center-N_cmos//2,x_coords_center+N_cmos//2,N_cmos)
+    y_prime_coords=np.linspace(y_coords_center-N_cmos//2,y_coords_center+N_cmos//2,N_cmos)*pixel_size
+    z_prime_coords=np.linspace(x_coords_center-N_cmos//2,x_coords_center+N_cmos//2,N_cmos)*pixel_size
 
     
     result_loop=forward_propagate(
