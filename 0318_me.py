@@ -152,7 +152,7 @@ def forward_propagate(
 
     dh_dx, dh_dy = compute_surface_gradients(h,x_coords,y_coords)   #표면 편미분
     
-    U_in=compute_U_in(X,Y,h,A0,wavelength)  #거울 들어가는 입사광 복소장
+    U_in=compute_U_in(X,Y,t,A0,wavelength)  #거울 들어가는 입사광 복소장
     
     theta_loc=compute_incident_angle(dh_dx, dh_dy)  #입사광의 입사각
     
