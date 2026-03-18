@@ -15,27 +15,32 @@ from sanity_utils import plot_1x3
 
 wavelength = 500e-9;  A0, t = 1.0, 0.0
 n1 = 1.0;  n2_complex = complex(0.97112, 1.8737)
-pixel_size = 10e-6;  N = 32
+r_width    = 500e-6        # 반사면 실제 폭
+N          = 64            # 픽셀 개수
 
-x_coords = np.linspace(1, N, N) * pixel_size
-y_coords = np.linspace(-N//2, N//2-1, N) * pixel_size
+pixel_size = r_width / N   # 픽셀 간격 자동 계산
+
+x_coords = np.linspace(1, N, N) * pixel_size       # x > 0
+y_coords = np.linspace(-(N-1)//2, (N-1)//2, N) * pixel_size
 h_ref    = np.zeros((N, N))
 
 dx = float(x_coords[1]-x_coords[0])
 dy = float(y_coords[1]-y_coords[0])
 
-x_cmos_near = x_coords[-1] + 3e-6   # 3 um gap
+x_cmos_near = x_coords[-1] + 1e-6   # 3 um gap
 
-N_cmos   = 48
-y_span   = y_coords[-1] - y_coords[0]
 z_center = (x_coords[0] + x_coords[-1]) / 2
-z_span   = (x_coords[-1] - x_coords[0]) * 1.5
-y_prime  = np.linspace(y_coords[0]  - y_span*0.25,
-                       y_coords[-1] + y_span*0.25, N_cmos)
-z_prime  = np.linspace(z_center - z_span/2,
-                       z_center + z_span/2, N_cmos)
+
+cmos_width    = 600e-6        # CMOS 실제 폭
+N_cmos     = 64         # CMOS 픽셀 개수
+
+cmos_pixel = cmos_width / N_cmos   # CMOS 픽셀 간격 자동 계산
+
+y_prime = np.linspace(-cmos_width/2, cmos_width/2, N_cmos)
+z_prime = np.linspace(z_center - cmos_width/2, z_center + cmos_width/2, N_cmos)
 dy_cmos = float(y_prime[1]-y_prime[0])
 dz_cmos = float(z_prime[1]-z_prime[0])
+
 
 
 def run(out_dir: Path):
